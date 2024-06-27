@@ -71,23 +71,28 @@ def create_account(emails, password):
     return response.json()
 
 def main():
-    num_accounts = 2
+    num_accounts = 20
     accounts = []
     for i in range(num_accounts):
-        email = generate_random_email()
-        password = generate_random_password(16)
-        response = create_account(email, password)
-        account_info = {
-            "email": email,
-            "password": password,
-            "response": response
-        }
-        accounts.append(account_info)
-        print(f"Created account {i+1}: {email} - {response}")
-        time.sleep(1)  # To avoid getting rate limited
-
+        try:
+            email = generate_random_email()
+            password = generate_random_password(16)
+            response = create_account(email, password)
+            account_info = {
+                "email": email,
+                "password": password,
+                "response": response
+            }
+            accounts.append(account_info)
+            print(f"Created account {i+1}: {email} - {response}")
+            print(account_info)
+        except Exception as e:
+            print(f"Error creating account {i+1}: {e}")
+            continue
+        time.sleep(16)  # To avoid getting rate limited
+    
     with open("accounts.json", "a") as outfile:
         json.dump(accounts, outfile, indent=4)
 
 if __name__ == "__main__":
-    main()        
+    main()
